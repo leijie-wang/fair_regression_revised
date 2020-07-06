@@ -1,0 +1,87 @@
+Dataset: adult; loss: logistic; eps list: [0.275, 0.31, 1]; 
+epsilon value:  0.275 : number of oracle calls 6
+epsilon value:  0.31 : number of oracle calls 6
+epsilon value:  1 : number of oracle calls 6
+
+
+Dataset: adult; loss: logistic; Solver: OLS
+Train set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.185786   0.15534
+1              0.310      0.185786   0.15534
+2              1.000      0.185786   0.15534
+Test set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.099693  0.967142
+1              0.310      0.099693  0.967142
+2              1.000      0.099693  0.967142
+
+
+Dataset: adult; loss: logistic; Solver: SVM_LP
+Train set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.200577  0.080967
+1              0.310      0.200577  0.080967
+2              1.000      0.200577  0.080967
+Test set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.109594  0.982608
+1              0.310      0.109594  0.982608
+2              1.000      0.109594  0.982608
+
+
+
+Dataset: adult; loss: logistic; Solver: RF Regression
+Train set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.250361  0.185673
+1              0.310      0.250361  0.185673
+2              1.000      0.250361  0.185673
+Test set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.194264  0.796511
+1              0.310      0.194264  0.796511
+2              1.000      0.194264  0.796511
+
+
+
+Dataset: adult; loss: logistic; Solver: XGB Classifier
+Train set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.216089    0.2815
+1              0.310      0.216089    0.2815
+2              1.000      0.216089    0.2815
+Test set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.207921  0.569803
+1              0.310      0.207921  0.569803
+2              1.000      0.207921  0.569803
+
+
+
+Dataset: adult; loss: logistic; Solver: LR
+Train set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.185786  0.045977
+1              0.310      0.185786  0.045977
+2              1.000      0.185786  0.045977
+Test set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.129054  1.191487
+1              0.310      0.129054  1.191487
+2              1.000      0.129054  1.191487
+
+
+
+
+Dataset: adult; loss: logistic; Solver: XGB Regression
+Train set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.049784  0.355225
+1              0.310      0.302309  0.362297
+2              1.000      0.302309  0.362297
+Test set trade-off:
+   specified epsilon  SP disparity  logistic
+0              0.275      0.036190  0.675474
+1              0.310      0.267327  0.777887
+2              1.000      0.267327  0.777887
