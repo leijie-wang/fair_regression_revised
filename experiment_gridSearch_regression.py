@@ -4,12 +4,10 @@ import numpy as np
 import pandas as pd
 import fairlearn.regression.data_parser as parser
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
 import pickle
-import fairlearn.regression.eval as evaluate
 import fairlearn.regression.solvers as solvers
-from fairlearn.regression.exp_grad import FairRegression
-import fairlearn.regression.data_augment as augment
+import fairlearn.regression.eval as evaluate
+from fairlearn.regression.grid_search_regression import GridSearchRegression
 print = functools.partial(print, flush=True)
 
 
@@ -70,6 +68,7 @@ def evaluate_accuracy_fairness(y_true,a,total_pred,result_weights,loss,Theta):
         return DP_disp,np.sqrt(loss_mean)
     else:
         return DP_disp,loss_mean
+
 dataset = "law_school"
 _SMALL = True
 size = 200
@@ -79,8 +78,6 @@ TEST_SIZE = 0.5  # fraction of observations from each protected group
 Theta = np.linspace(0, 1.0, 4)
 ## the construction of thresholds, it would be better to set 40 as a constant parameter.
 alpha = (Theta[1] - Theta[0])/2
-eps_list = [0.275, 0.31, 1]
-#eps_list = [0.275]
 constraint = "DP"
 loss = "square"
 
@@ -97,40 +94,23 @@ if _SMALL:
 
 x_train, a_train, y_train, x_test, a_test, y_test = train_test_split_groups(x, a, y, random_seed=DATA_SPLIT_SEED)
 
-fair_model = {}
-train_results = {}
-test_results = {}
 print("dataset:",dataset)
 print("Small Sample:",_SMALL)
 print("loss:",loss)
 
-for eps in eps_list:
-    
-    estimator = solvers.LeastSquaresLearner(Theta)
-    #estimator = solvers.SVM_LP_Learner(off_set=alpha)
-    #estimator = solvers.LogisticRegressionLearner(Theta)
-    #estimator = solvers.RF_Regression_Learner(Theta)
-    fair_model[eps] = FairRegression(eps,Theta,estimator,constraint,loss)
-    fair_model[eps].fit(x_train,y_train,sensitive_features=a_train)
-    #y_pred_train = fair_model[eps].predict(x_train)
-    y_pred_train,result_weights_train = fair_model[eps].predict(x_train)
-    dp_train,loss_train = evaluate_accuracy_fairness(y_train,a_train,y_pred_train,result_weights_train,loss,Theta)
-    train_results[eps] = [dp_train,loss_train]
-    
-    #print("y_pred_train:",y_pred_train)
-    #print("result_weights_train:",result_weights_train)
-    #print("eps:%f: dp_train: %f loss_train:%f"%(eps,dp_train,loss_train))
-    
-    #y_pred_test = fair_model[eps].predict(x_test)
-    y_pred_test, result_weights_test= fair_model[eps].predict(x_test)
-    dp_test,loss_test = evaluate_accuracy_fairness(y_test,a_test,y_pred_test,result_weights_test,loss,Theta)
-    test_results[eps] = [dp_test,loss_test]
+estimator = solvers.LeastSquaresLearner(Theta)
+fair_model = GridSearchRegression(estimator,Theta,constraint,loss,grid_size=60)
+fair_model.fit(x_train,y_train,sensitive_features=a_train)
+y_pred_train = fair_model.predict(x_train)
+dp_train,loss_train = evaluate_accuracy_fairness(y_train,a_train,y_pred_train,[1],loss,Theta)
+#print("y_pred_train:",y_pred_train)
+print("dp_train: %f loss_train:%f"%(dp_train,loss_train))
 
-    #print("y_pred_test:",y_pred_test)
-    #print("result_weights_test:",result_weights_test)
-    #print("eps:%f: dp_test: %f loss_test:%f"%(eps,dp_test,loss_test))
-for eps in eps_list:
-    print("eps:%f: dp_train: %f loss_train:%f"%(eps,train_results[eps][0],train_results[eps][1]))
-for eps in eps_list:
-    print("eps:%f: dp_test: %f loss_test:%f"%(eps,test_results[eps][0],test_results[eps][1]))
+#y_pred_test = fair_model[eps].predict(x_test)
+y_pred_test = fair_model.predict(x_test)
+dp_test,loss_test = evaluate_accuracy_fairness(y_test,a_test,y_pred_test,[1],loss,Theta)
+#print("y_pred_test:",y_pred_test)
+#print("result_weights_test:",result_weights_test)
+print("dp_test: %f loss_test:%f"%(dp_test,loss_test))
+
 

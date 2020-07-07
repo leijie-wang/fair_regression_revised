@@ -69,7 +69,8 @@ class GridSearch(BaseEstimator, MetaEstimatorMixin):
                  grid_size=10,
                  grid_limit=2.0,
                  grid_offset=None,
-                 grid=None):
+                 grid=None,
+                 error_weights=None):
         """Construct a GridSearch object."""
         self.estimator = estimator
         if not isinstance(constraints, Moment):
@@ -90,7 +91,9 @@ class GridSearch(BaseEstimator, MetaEstimatorMixin):
         self.grid_offset = grid_offset
         self.grid = grid
 
-    def fit(self, X, y, **kwargs):
+        self.error_weights = error_weights
+
+    def fit(self, X, y,**kwargs):
         """Run the grid search.
 
         This will result in multiple copies of the
@@ -129,13 +132,14 @@ class GridSearch(BaseEstimator, MetaEstimatorMixin):
         logger.debug("Preparing constraints and objective")
         self.constraints.load_data(X, y_train, **kwargs)
         objective = self.constraints.default_objective()
-        objective.load_data(X, y_train, **kwargs)
+        objective.load_data(X, y_train, self.error_weights,**kwargs)
 
         # Basis information
         pos_basis = self.constraints.pos_basis
         neg_basis = self.constraints.neg_basis
         neg_allowed = self.constraints.neg_basis_present
-        objective_in_the_span = (self.constraints.default_objective_lambda_vec is not None) #?why does this mean, default false. 
+        objective_in_the_span = (self.constraints.default_objective_lambda_vec is not None) 
+        #why does this mean, default false? To decide whether we should consider the default objective signed weights
 
         if self.grid is None:
             logger.debug("Creating grid of size %i", self.grid_size)
