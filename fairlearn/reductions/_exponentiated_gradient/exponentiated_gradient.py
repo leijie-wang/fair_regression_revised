@@ -120,8 +120,8 @@ class ExponentiatedGradient(BaseEstimator, MetaEstimatorMixin):
 
             # set lambdas for every constraint
             lambda_vec = B * np.exp(theta) / (1 + np.exp(theta).sum())
-            print("t:",t)
-            print("lambda_vec:",lambda_vec)
+            #print("t:",t)
+            #print("lambda_vec:",lambda_vec)
             self.lambda_vecs_EG_[t] = lambda_vec
             lambda_EG = self.lambda_vecs_EG_.mean(axis=1)
             #lambda_hat, get the mean of lambdas from start to now. 

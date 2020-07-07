@@ -112,19 +112,23 @@ for eps in eps_list:
     #estimator = solvers.RF_Regression_Learner(Theta)
     fair_model[eps] = FairRegression(eps,Theta,estimator,constraint,loss)
     fair_model[eps].fit(x_train,y_train,sensitive_features=a_train)
+    #y_pred_train = fair_model[eps].predict(x_train)
     y_pred_train,result_weights_train = fair_model[eps].predict(x_train)
-    print("y_pred_train:",y_pred_train)
-    #print("result_weights_train:",result_weights_train)
     dp_train,loss_train = evaluate_accuracy_fairness(y_train,a_train,y_pred_train,result_weights_train,loss,Theta)
     train_results[eps] = [dp_train,loss_train]
-    #print("eps:%f: dp_train: %f loss_train:%f"%(eps,dp_train,loss_train))
     
+    print("y_pred_train:",y_pred_train)
+    print("result_weights_train:",result_weights_train)
+    print("eps:%f: dp_train: %f loss_train:%f"%(eps,dp_train,loss_train))
+    
+    #y_pred_test = fair_model[eps].predict(x_test)
     y_pred_test, result_weights_test= fair_model[eps].predict(x_test)
-    #print("y_pred_test:",y_pred_test)
-    #print("result_weights_test:",result_weights_test)
     dp_test,loss_test = evaluate_accuracy_fairness(y_test,a_test,y_pred_test,result_weights_test,loss,Theta)
     test_results[eps] = [dp_test,loss_test]
-    #print("eps:%f: dp_test: %f loss_test:%f"%(eps,dp_test,loss_test))
+
+    print("y_pred_test:",y_pred_test)
+    print("result_weights_test:",result_weights_test)
+    print("eps:%f: dp_test: %f loss_test:%f"%(eps,dp_test,loss_test))
 for eps in eps_list:
     print("eps:%f: dp_train: %f loss_train:%f"%(eps,train_results[eps][0],train_results[eps][1]))
 for eps in eps_list:

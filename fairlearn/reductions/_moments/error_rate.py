@@ -14,7 +14,6 @@ class ErrorRate(ClassificationMoment):
     short_name = "Err"
 
     def load_data(self, X, y, weights = None, **kwargs):
-        #print("I am in revised fairlearn errorrate")
         """Load the specified data into the object."""
         super().load_data(X, y, **kwargs)
         self.index = [_ALL] #“all”
@@ -34,9 +33,9 @@ class ErrorRate(ClassificationMoment):
         #what is this for? the same appears in the regression algorithm. 
         return error
 
-    # def project_lambda(self, lambda_vec):
-    #     """Return the lambda values."""
-    #     return lambda_vec
+    def project_lambda(self, lambda_vec):
+        """Return the lambda values."""
+        return lambda_vec
 
     def signed_weights(self, lambda_vec=None):
         """Return the signed weights."""
