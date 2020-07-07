@@ -72,6 +72,7 @@ class GridSearch(BaseEstimator, MetaEstimatorMixin):
                  grid=None,
                  error_weights=None):
         """Construct a GridSearch object."""
+        #print("I am at local grid search")
         self.estimator = estimator
         if not isinstance(constraints, Moment):
             raise RuntimeError("Unsupported disparity metric")

@@ -70,13 +70,13 @@ def evaluate_accuracy_fairness(y_true,a,total_pred,result_weights,loss,Theta):
         return DP_disp,np.sqrt(loss_mean)
     else:
         return DP_disp,loss_mean
-dataset = "law_school"
+dataset = "communities"
 _SMALL = True
 size = 200
 DATA_SPLIT_SEED = 4
 # Global Variables
 TEST_SIZE = 0.5  # fraction of observations from each protected group
-Theta = np.linspace(0, 1.0, 4)
+Theta = np.linspace(0, 1.0, 41)
 ## the construction of thresholds, it would be better to set 40 as a constant parameter.
 alpha = (Theta[1] - Theta[0])/2
 eps_list = [0.275, 0.31, 1]
